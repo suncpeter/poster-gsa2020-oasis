@@ -1,0 +1,86 @@
+---
+title: "Code for GSA 2020 Poster"
+author: "Peter Sun"
+date: "November, 2020"
+output:
+  html_document:
+    number_sections: no
+    toc: yes
+    toc_depth: 3
+---
+
+# Load Packages and Setup Font Awesome
+
+```{r warning=F, error=F, message=F}
+library(tidyverse)
+library(viridis)
+library(colorspace)
+library(waffle)
+library(extrafont)
+library(ggpubr)
+library(showtext)
+extrafont::font_import(path = "private/", pattern = "fa-", prompt = F)
+loadfonts(device = "win")
+font_add(family = "FontAwesome5Free-Solid", regular = "private/fa-solid-900.ttf")
+font_add(family = "FontAwesome5Free-Regular", regular = "private/fa-regular-400.ttf")
+font_add(family = "FontAwesome5Brands-Regular", regular = "private/fa-brands-400.ttf")
+showtext_auto()
+```
+
+# Import Data
+
+```{r message=F, error=F, warning=F}
+edu <- read_csv("edu.csv")
+schools <- read_csv("schools.csv")
+```
+
+# Waffle Plots
+
+```{r warning=F, error=F, message=F}
+(w1 <- waffle(edu,
+  colors = viridis(4,
+    begin = 0.4,
+    end = 1, direction = -1, option = "viridis"
+  ), rows = 12, use_glyph = "graduation-cap",
+  glyph_size = 35
+) +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(size = 100),
+    plot.caption = element_text(size = 100),
+    text = element_text(size = 100, color = "white"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "transparent", colour = NA),
+    plot.background = element_rect(fill = "transparent", colour = NA),
+    legend.key = element_rect(fill = "transparent", colour = "transparent"),
+    legend.background = element_rect(fill = NA, color = NA)
+  ))
+
+(w2 <- waffle(schools,
+  colors = viridis(5,
+    begin = 0.4,
+    end = 1, direction = -1, option = "inferno"
+  ), rows = 10, use_glyph = "users",
+  glyph_size = 35
+) +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(size = 100),
+    plot.caption = element_text(size = 100),
+    text = element_text(size = 100, color = "white"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "transparent", colour = NA),
+    plot.background = element_rect(fill = "transparent", colour = NA),
+    legend.key = element_rect(fill = "transparent", colour = "transparent"),
+    legend.background = element_rect(fill = NA, color = NA)
+  ))
+```
+
+# Save Plots
+
+```{r}
+ggsave("edu.png", plot = w1, width = 6, height = 6, dpi = 600, bg = "transparent")
+ggsave("schools.png", plot = w2, width = 6, height = 6, dpi = 600, bg = "transparent")
+```
